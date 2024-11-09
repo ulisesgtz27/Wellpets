@@ -1,0 +1,57 @@
+plugins {
+    id "com.android.application"
+    id 'com.google.gms.google-services' // Complemento de Google Services
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def keystorePropertiesFile = rootProject.file("key.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+    namespace = "com.lorena.wellpets"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8" // Ajuste la versión de JVM directamente
+    }
+
+    defaultConfig {
+        applicationId = "com.lorena.wellpets"
+        minSdk = 23 // Cambiado a 23
+        targetSdk = flutter.targetSdkVersion
+        versionCode = 3
+        versionName = flutter.versionName
+    }
+
+   signingConfigs {
+        release {
+        keyAlias = keystoreProperties['keyAlias']
+        keyPassword = keystoreProperties['keyPassword']
+        storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+        storePassword = keystoreProperties['storePassword']
+    }
+    }
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.release
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
+
+dependencies {
+    // Dependencias específicas de Firebase (ajústalas según tus necesidades)
+    implementation platform('com.google.firebase:firebase-bom:33.5.1')
+    implementation 'com.google.firebase:firebase-analytics' // Firebase Analytics
+}

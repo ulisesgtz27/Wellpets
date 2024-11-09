@@ -1,0 +1,1 @@
+ C:\\wellpetsF\\app\\.dart_tool\\flutter_build\\6e08877837f2d7ec4ebc3b53987a1f49\\native_assets.yaml: 
