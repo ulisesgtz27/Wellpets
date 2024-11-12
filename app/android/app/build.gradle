@@ -25,7 +25,7 @@ android {
 
     defaultConfig {
         applicationId = "com.lorena.wellpets"
-        minSdk = 23 // Cambiado a 23
+        minSdk = 23 
         targetSdk = flutter.targetSdkVersion
         versionCode = 3
         versionName = flutter.versionName

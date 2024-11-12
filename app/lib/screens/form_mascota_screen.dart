@@ -23,6 +23,7 @@ class _FormMascotaScreenState extends State<FormMascotaScreen> {
     'Pug',
     'Chihuahua',
     'French Poodle',
+    'Pastor Belga',
     'Otro'
   ];
 

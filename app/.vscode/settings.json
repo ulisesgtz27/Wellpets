@@ -1,0 +1,5 @@
+{
+    "avdmanager.sdkPath": "c:\\wellpetsF\\app\\lib\\config",
+    "avdmanager.executable": "c:\\Android\\platform-tools\\adb.exe",
+    "java.configuration.updateBuildConfiguration": "interactive"
+}
