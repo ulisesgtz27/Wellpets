@@ -116,7 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    // Configura el temporizador para cambiar la página automáticamente cada 3 segundos
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       if (_currentPage < 2) {
         _currentPage++;
@@ -134,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _pageController.dispose();
-    _timer.cancel(); // Cancela el temporizador cuando se sale de la pantalla
+    _timer.cancel();
     super.dispose();
   }
 
@@ -204,8 +203,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
+            padding: const EdgeInsets.symmetric(vertical: 100.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildCustomButton(
                   'Perfil Mascota',
@@ -213,7 +213,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   context,
                   () => perfilMascotaScreen(context, userId, ''),
                 ),
-                SizedBox(height: 10),
                 _buildCustomButton(
                   'Perfil Usuario',
                   Icons.person,
@@ -223,7 +222,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(builder: (context) => PerfilUsuario()),
                   ),
                 ),
-                SizedBox(height: 10),
                 _buildCustomButton(
                   'Agregar Mascota',
                   Icons.note_add,
@@ -300,28 +298,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static Widget _buildCustomButton(String label, IconData icon,
       BuildContext context, VoidCallback onPressed) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton.icon(
-        onPressed: onPressed,
-        icon: Icon(icon, color: Colors.white, size: 28),
-        label: Text(
-          label,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, color: Colors.white, size: 28),
+      label: Text(
+        label,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
         ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFBF73CC),
-          padding: EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: Colors.purple, width: 1),
-          ),
-          elevation: 4,
-          shadowColor: Colors.tealAccent.withOpacity(0.3),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFFBF73CC),
+        padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.purple, width: 1),
         ),
       ),
     );

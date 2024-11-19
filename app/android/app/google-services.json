@@ -7,31 +7,39 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:129764271799:android:c1eed834abcb5f21994f32",
+        "mobilesdk_app_id": "1:129764271799:android:b328635c1ca5e0eb994f32",
         "android_client_info": {
           "package_name": "com.lorena.wellpets"
         }
       },
       "oauth_client": [
         {
-          "client_id": "129764271799-atr1sg6p1jlc2551474o6q43doi0ptel.apps.googleusercontent.com",
+          "client_id": "129764271799-ambqdqep6iduopgc0uush5romgb78ef6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lorena.wellpets",
+            "certificate_hash": "fdf8334d2c8e8d4f4e2f4da872328d2a66017ebe"
+          }
+        },
+        {
+          "client_id": "129764271799-609tiso04cl0fp72ctqbp9blc7mo29r5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBmOJkI5c9xtMe_dUUCsgJZBmbAwmcibXM"
+          "current_key": "AIzaSyCW8jYKCMazUrh7TxozRdgn5NhFKIvjlA4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "129764271799-atr1sg6p1jlc2551474o6q43doi0ptel.apps.googleusercontent.com",
+              "client_id": "129764271799-609tiso04cl0fp72ctqbp9blc7mo29r5.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "129764271799-0487cg1t558ma6k8f2kvjc0tr57762l7.apps.googleusercontent.com",
+              "client_id": "129764271799-cpd8sugulef7cqt6arc6s5sm2bt01cct.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.lorena.wellpets"
@@ -42,5 +50,5 @@
       }
     }
   ],
-  "configuration_version": "3"
+  "configuration_version": "5"
 }

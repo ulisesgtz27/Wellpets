@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:wellpets/services/firestore_service.dart';
+import 'package:wellpets/screens/inicio_sesion_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -44,46 +45,55 @@ class _PerfilUsuarioState extends State<PerfilUsuario> {
   final ImagePicker _picker = ImagePicker();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = FirestoreService();
-  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<void> _getUserData() async {
     User? user = _auth.currentUser;
 
     if (user != null) {
-      Map<String, dynamic> userData = await _firestoreService.getUserData(user.uid);
+      Map<String, dynamic> userData =
+          await _firestoreService.getUserData(user.uid);
       setState(() {
-        _nombre = userData['nombre'] ?? user.displayName ?? 'Nombre no disponible';
+        _nombre =
+            userData['nombre'] ?? user.displayName ?? 'Nombre no disponible';
         _correo = userData['correo'] ?? user.email ?? 'Correo no disponible';
-        _fotoUrl = userData['photoUrl'] ?? 'assets/images/perfil.png';
       });
+
+      // Cargar la foto desde SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? savedPhoto = prefs.getString('profile_photo');
+      if (savedPhoto != null) {
+        setState(() {
+          _fotoUrl = savedPhoto;
+        });
+      }
     }
   }
 
   Future<void> _pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
+        _fotoUrl = _image!.path; // Asignar la ruta local de la imagen
       });
 
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      Reference ref = _storage.ref().child('profile_pictures').child(fileName);
-      UploadTask uploadTask = ref.putFile(_image!);
-      TaskSnapshot taskSnapshot = await uploadTask;
-      String imageUrl = await taskSnapshot.ref.getDownloadURL();
-
-      await _firestoreService.updateUserData(
-        _auth.currentUser!.uid,
-        {'photoUrl': imageUrl},
-      );
-
-      await _auth.currentUser!.updatePhotoURL(imageUrl);
-
-      setState(() {
-        _fotoUrl = imageUrl;
-      });
+      // Guardar la imagen seleccionada en SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('profile_photo', _fotoUrl);
     }
+  }
+
+  // Método para cerrar sesión
+  Future<void> _cerrarSesion() async {
+    await _auth.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              const LoginScreen()), // Navegar a la pantalla de inicio de sesión
+    );
   }
 
   @override
@@ -112,44 +122,44 @@ class _PerfilUsuarioState extends State<PerfilUsuario> {
                     radius: 60,
                     backgroundImage: _fotoUrl.startsWith('assets')
                         ? AssetImage(_fotoUrl)
-                        : NetworkImage(_fotoUrl) as ImageProvider,
-                    child: _image == null
-                        ? const Icon(Icons.camera_alt, color: Colors.white, size: 30)
+                        : FileImage(File(_fotoUrl)) as ImageProvider,
+                    child: _image == null && _fotoUrl.startsWith('assets')
+                        ? const Icon(Icons.camera_alt,
+                            color: Colors.white, size: 30)
                         : null,
                   ),
                 ),
+
                 const SizedBox(height: 16),
                 Text(
-                      'Nombre de usuario',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
+                  'Nombre de usuario',
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
                 Text(
                   _nombre,
-                  style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 26, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
-                // Título y valor del nombre de usuario con línea de separación
-                Column(
-                  children: [
-                    const Divider(
-                      color: Colors.grey,
-                      height: 24,
-                    ),
-                  ],
+                const Divider(
+                  color: Colors.grey,
+                  height: 24,
                 ),
-                // Título y valor del correo electrónico con línea de separación
                 Column(
                   children: [
                     Text(
                       'Correo electrónico',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     Text(
                       _correo,
-                      style: const TextStyle(fontSize: 16, color: Colors.black87),
+                      style:
+                          const TextStyle(fontSize: 16, color: Colors.black87),
                     ),
                     const Divider(
                       color: Colors.grey,
@@ -163,13 +173,30 @@ class _PerfilUsuarioState extends State<PerfilUsuario> {
                     // Acción al pulsar el botón de editar
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
                   child: const Text(
                     'Editar Perfil',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Botón para cerrar sesión
+                ElevatedButton(
+                  onPressed: _cerrarSesion,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: const Text(
+                    'Cerrar Sesión',
                     style: TextStyle(fontSize: 18),
                   ),
                 ),

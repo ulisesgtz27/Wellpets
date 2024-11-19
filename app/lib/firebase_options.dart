@@ -41,7 +41,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCGyzsS-cX67g2KjLmneK6vLUVdEoNpdqw',
+    apiKey: 'AIzaSyBjV1544Tfml_SfeWXEOnKQT0pKTGei3_U',
     appId: '1:129764271799:web:059ae398186f828f994f32',
     messagingSenderId: '129764271799',
     projectId: 'wellpets-9fde2',
@@ -51,20 +51,22 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBmOJkI5c9xtMe_dUUCsgJZBmbAwmcibXM',
-    appId: '1:129764271799:android:2ab7a8f0433d65af994f32',
+    apiKey: 'AIzaSyCW8jYKCMazUrh7TxozRdgn5NhFKIvjlA4',
+    appId: '1:129764271799:android:b328635c1ca5e0eb994f32',
     messagingSenderId: '129764271799',
     projectId: 'wellpets-9fde2',
     storageBucket: 'wellpets-9fde2.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBsLhH-iEtJHp1fvbBklUKBOQ_vQmknv94',
-    appId: '1:129764271799:ios:4694d9dee0e19fe4994f32',
+    apiKey: 'AIzaSyAYacS-GcanBgJ48W_dr1NEUHw3hYVm6Ow',
+    appId: '1:129764271799:ios:afb8d2a05d968197994f32',
     messagingSenderId: '129764271799',
     projectId: 'wellpets-9fde2',
     storageBucket: 'wellpets-9fde2.firebasestorage.app',
-    iosBundleId: 'com.lorena.wellpets',
+    androidClientId: '129764271799-ambqdqep6iduopgc0uush5romgb78ef6.apps.googleusercontent.com',
+    iosClientId: '129764271799-cpd8sugulef7cqt6arc6s5sm2bt01cct.apps.googleusercontent.com',
+    iosBundleId: 'com.example.wellpets',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -77,7 +79,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCGyzsS-cX67g2KjLmneK6vLUVdEoNpdqw',
+    apiKey: 'AIzaSyBjV1544Tfml_SfeWXEOnKQT0pKTGei3_U',
     appId: '1:129764271799:web:44ac905735d4bd6e994f32',
     messagingSenderId: '129764271799',
     projectId: 'wellpets-9fde2',
@@ -85,4 +87,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'wellpets-9fde2.firebasestorage.app',
     measurementId: 'G-7BNP53YPLS',
   );
+
 }

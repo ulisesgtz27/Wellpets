@@ -38,6 +38,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <meta-data
+        android:name="com.google.android.gms.auth.api.signin.API_KEY"
+        android:value="@string/google_api_key" />
     </application>
 
     <!-- Consultas de Intents (para API 30+ en adelante) -->

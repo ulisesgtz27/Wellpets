@@ -27,7 +27,7 @@ android {
         applicationId = "com.lorena.wellpets"
         minSdk = 23 
         targetSdk = flutter.targetSdkVersion
-        versionCode = 3
+        versionCode = 5
         versionName = flutter.versionName
     }
 

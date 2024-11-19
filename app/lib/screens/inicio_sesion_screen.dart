@@ -2,17 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'registro_screen.dart'; // Importa la pantalla de registro
 import 'home_screen.dart'; // Importa la pantalla de inicio
-import 'package:firebase_auth/firebase_auth.dart'; // Importar Firebase Auth
+import 'package:wellpets/services/firestore_service.dart'; // Importa tu clase FirestoreService
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Controladores para los campos de texto
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool _obscurePassword = true;
+  final FirestoreService _firestoreService =
+      FirestoreService(); // Instancia del servicio
+
+  // Función para restablecer la contraseña
+  Future<void> _resetPassword() async {
+    String email = emailController.text;
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Por favor ingrese su correo electrónico')),
+      );
+      return;
+    }
+
+    try {
+      await _firestoreService
+          .resetPassword(email); // Usamos la función de FirestoreService
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content:
+                Text('Se ha enviado un correo para restablecer la contraseña')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al enviar el correo: $e')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -54,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   SizedBox(height: 20),
                   TextField(
-                    controller: emailController, // Usando controlador
+                    controller: emailController,
                     decoration: InputDecoration(
                       labelText: 'Correo electrónico',
                       border: OutlineInputBorder(),
@@ -62,12 +96,21 @@ class LoginScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   TextField(
-                    controller: passwordController, // Usando controlador
-                    obscureText: true,
+                    controller: passwordController,
+                    obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       labelText: 'Contraseña',
                       border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.visibility_off),
+                      suffixIcon: IconButton(
+                        icon: Icon(_obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility),
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                      ),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -76,20 +119,26 @@ class LoginScreen extends StatelessWidget {
                       String correo = emailController.text;
                       String password = passwordController.text;
 
+                      if (correo.isEmpty || password.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content:
+                                  Text('Por favor ingrese todos los campos')),
+                        );
+                        return;
+                      }
+
                       try {
-                        // Llama a la función de autenticación
                         await FirebaseAuth.instance.signInWithEmailAndPassword(
                           email: correo,
                           password: password,
                         );
 
-                        // Redirige al usuario a la pantalla principal si las credenciales son válidas
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => HomeScreen()),
                         );
                       } catch (e) {
-                        // Muestra un mensaje de error
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                               content: Text('Error de inicio de sesión: $e')),
@@ -103,29 +152,51 @@ class LoginScreen extends StatelessWidget {
                     child: Text('Iniciar sesión con Email'),
                   ),
                   SizedBox(height: 20),
-                  Text('¿Olvidó su contraseña?',
-                      style: TextStyle(color: Colors.purple)),
+                  TextButton(
+                    onPressed: () {
+                      // Mostrar cuadro de diálogo para restablecer la contraseña
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Restablecer contraseña'),
+                            content: TextField(
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                labelText: 'Correo electrónico',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(
+                                      context); // Cierra el cuadro de diálogo
+                                },
+                                child: Text('Cancelar'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  _resetPassword(); // Llamar a la función para enviar el correo
+                                  Navigator.pop(
+                                      context); // Cierra el cuadro de diálogo
+                                },
+                                child: Text('Enviar'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Text(
+                      '¿Olvidó su contraseña?',
+                      style: TextStyle(color: Colors.purple),
+                    ),
+                  ),
                   SizedBox(height: 20),
                   Divider(thickness: 1, color: Colors.grey),
                   SizedBox(height: 10),
-                  Text('o Continuar con'),
                   SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.facebook),
-                        color: Colors.blue,
-                        onPressed: () {},
-                      ),
-                      SizedBox(width: 20),
-                      IconButton(
-                        icon: Icon(Icons.g_translate),
-                        color: Colors.red,
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
                   SizedBox(height: 20),
                   Text.rich(
                     TextSpan(
@@ -142,8 +213,7 @@ class LoginScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        RegistroScreen()), // Navega a la pantalla de registro
+                                    builder: (context) => RegistroScreen()),
                               );
                             },
                         ),
