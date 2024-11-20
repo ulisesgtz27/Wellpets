@@ -1,0 +1,2 @@
+Mejoras faltantes 
+Implementación de la muestra de mascotas 
