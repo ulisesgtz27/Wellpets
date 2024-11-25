@@ -1,0 +1,41 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+# 1. Instalar Flutter
+- script: |
+    sudo apt-get update
+    sudo apt-get install -y curl git unzip xz-utils zip libglu1-mesa
+    curl -LO https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.5-stable.tar.xz
+    tar xf flutter_linux_3.13.5-stable.tar.xz
+    export PATH="$PATH:`pwd`/flutter/bin"
+    flutter doctor
+  displayName: 'Instalar Flutter SDK'
+
+# 2. Restaurar dependencias
+- script: |
+    flutter pub get
+  displayName: 'Restaurar dependencias de Flutter'
+
+# 3. Compilar APK
+- script: |
+    flutter build apk --release
+  displayName: 'Compilar APK para Flutter'
+
+# 4. Ejecutar pruebas
+- script: |
+    flutter test
+  displayName: 'Ejecutar pruebas de Flutter'
+
+# 5. Publicar artefactos
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: 'build/app/outputs/flutter-apk/app-release.apk'
+    artifact: 'Flutter_APK'
+    publishLocation: 'pipeline'
+  displayName: 'Publicar APK de Flutter'
