@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+      - main  # Cambia "main" por el nombre de tu rama principal
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UseFlutterTool@0
+  inputs:
+    version: '1.0.0+1'  # Usa la versión estable de Flutter
+
+- script: |
+    flutter pub get
+    flutter build apk --release  # Construye el APK para Android 
+  displayName: 'Compilar APK para Android'
+
+- script: |
+    flutter test  # Ejecuta pruebas unitarias
+  displayName: 'Ejecutar pruebas automatizadas'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'C:\AppWell\Wellpets\app\build\app\outputs'  # Ruta del APK generado
+    ArtifactName: 'release-apk'
+    publishLocation: 'Container'
