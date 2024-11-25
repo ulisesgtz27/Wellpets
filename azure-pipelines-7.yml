@@ -1,0 +1,36 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+# Paso 1: Instalar Flutter
+- task: UseFlutter@0
+  inputs:
+    version: 'stable'  # Puedes elegir otra versión estable o específica
+  displayName: 'Instalar Flutter'
+
+# Paso 2: Configurar el entorno y dependencias
+- script: |
+    flutter doctor
+    flutter pub get
+  displayName: 'Configurar entorno y obtener dependencias'
+
+# Paso 3: Ejecutar pruebas unitarias
+- script: |
+    flutter test
+  displayName: 'Ejecutar pruebas unitarias'
+
+# Paso 4: Construir la aplicación para una plataforma específica (Android en este caso)
+- script: |
+    flutter build apk --release  # Para aplicaciones Android
+  displayName: 'Construir APK para Android'
+
+# Paso 5: Despliegue de APP
+- script: |
+    echo "Desplegar aplicación Flutter APK a Firebase Hosting"
+    flutter build APK
+    firebase deploy --only hosting
+  displayName: 'Desplegar Flutter APK a Firebase Hosting'
+
