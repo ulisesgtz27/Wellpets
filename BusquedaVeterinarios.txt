@@ -1,0 +1,6 @@
+Busqueda de Veterinarios WellPets
+
+- Diseño
+- Filtros por especialidad
+- Opiniones y valoración
+- Pruebas de funcionalidad
