@@ -1,0 +1,50 @@
+name: User Profile Creation Pipeline
+
+on:
+  push:
+    branches:
+      - main 
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Paso 1: Configurar el entorno (Node.js, Python, etc. según tu backend)
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'  # Usa la versión de Node.js de tu backend
+
+    # Paso 2: Instalar dependencias
+    - name: Install dependencies
+      run: |
+        npm install  # O usa el comando que corresponde a tu backend (como pip para Python)
+
+    # Paso 3: Ejecutar pruebas unitarias para validar la lógica de creación del perfil
+    - name: Run tests
+      run: |
+        npm test  # O usa flutter test si las pruebas están en tu app móvil
+
+    # Paso 4: Ejecutar pruebas de integración API - Verificar la creación de perfil
+    - name: Run API integration tests
+      run: |
+        npm run test:api  # Ejemplo de prueba de integración para verificar que el perfil se crea correctamente
+
+    # Paso 5: Desplegar a un entorno de staging (opcional)
+    - name: Deploy to staging
+      run: |
+        ./deploy-staging.sh  # Ejemplo de un script para desplegar el backend a un entorno de prueba
+
+    # Paso 6: Generar artefactos (opcional)
+    - name: Upload Profile Creation API Logs
+      uses: actions/upload-artifact@v2
+      with:
+        name: profile-creation-logs
+        path: logs/profile_creation.log  # Subir los registros de la API (si los generas)
