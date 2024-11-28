@@ -1,20 +1,43 @@
-# Android
-# Build your Android project with Gradle.
-# Add steps that test, sign, and distribute the APK, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/android
+name: wellpets
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-trigger:
-- main
+version: 1.0.0+1
 
-pool:
-  vmImage: 'macos-latest'
+environment:
+  sdk: ^3.5.3-317.0.dev
 
-steps:
-- task: Gradle@2
-  inputs:
-    workingDirectory: ''
-    gradleWrapperFile: 'gradlew'
-    gradleOptions: '-Xmx3072m'
-    publishJUnitResults: false
-    testResultsFiles: '**/TEST-*.xml'
-    tasks: 'assembleDebug'
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.2
+  cupertino_icons: ^1.0.8
+  carousel_slider: ^5.0.0
+  table_calendar: ^3.0.0
+  firebase_storage: ^12.3.4
+  firebase_core: 
+  firebase_database: ^11.1.4
+  cloud_firestore: ^5.4.4
+  firebase_auth: ^5.3.3
+  image_picker: ^1.1.2
+  google_sign_in: ^6.1.5
+  shared_preferences: ^2.3.3
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - lib/assets/images/
+
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
