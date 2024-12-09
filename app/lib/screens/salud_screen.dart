@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'home_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -118,14 +119,21 @@ class Calendario extends StatelessWidget {
             icon: Icon(Icons.search),
             onPressed: () {},
           ),
+          //boton de notificaciones para navegar
           IconButton(
             icon: Icon(Icons.notifications),
+            iconSize: 30.0, // Tamaño del icono
+            color: Colors.white, // Color del icono
             onPressed: () {
-              // Navigator.push(
-              //      context,
-              //      MaterialPageRoute(builder: (context) => pagina_principal()),
-              //    );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Index()),
+              );
             },
+            padding: EdgeInsets.all(10.0), // Padding alrededor del icono
+            constraints: BoxConstraints(), // Elimina el espacio extra alrededor del icono
+            splashColor: Colors.blueAccent, // Color del efecto de splash
+            highlightColor: Colors.blue, // Color del highlight cuando se presiona
           ),
         ],
       ),
