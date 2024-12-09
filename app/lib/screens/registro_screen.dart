@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Importar Firebase Auth
-import 'package:cloud_firestore/cloud_firestore.dart'; // Importar Firestore
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegistroScreen extends StatefulWidget {
   const RegistroScreen({super.key});
@@ -20,14 +20,12 @@ class _RegistroScreenState extends State<RegistroScreen> {
     String password = passwordController.text;
 
     try {
-      // Registrar usuario con Firebase Auth
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: correo,
         password: password,
       );
 
-      // Guardar datos adicionales en Firestore
       await FirebaseFirestore.instance
           .collection('usuarios')
           .doc(userCredential.user!.uid)
@@ -44,8 +42,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
         ),
       );
 
-      Navigator.pop(
-          context); // Regresa a la pantalla anterior si el registro es exitoso
+      Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -68,7 +65,15 @@ class _RegistroScreenState extends State<RegistroScreen> {
                   height: 300,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.purple[100],
+                    gradient: LinearGradient(
+                      colors: [Colors.purple[200]!, Colors.purple[400]!],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(40),
+                      bottomRight: Radius.circular(40),
+                    ),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -83,7 +88,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
                       Text(
                         'WellPets',
                         style: TextStyle(
-                          fontSize: 32,
+                          fontSize: 36,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
@@ -97,61 +102,86 @@ class _RegistroScreenState extends State<RegistroScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
                 children: [
-                  SizedBox(height: 20),
-                  TextField(
-                    controller: nombreController,
-                    decoration: InputDecoration(
-                      labelText: 'Nombre completo',
-                      border: OutlineInputBorder(),
+                  SizedBox(height: 30),
+                  Card(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  TextField(
-                    controller: telefonoController,
-                    decoration: InputDecoration(
-                      labelText: 'Teléfono',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  TextField(
-                    controller: correoController,
-                    decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Contraseña',
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.visibility_off),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _registrarUsuario,
-                    style: ElevatedButton.styleFrom(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                    ),
-                    child: Text('Registrarse'),
-                  ),
-                  SizedBox(height: 20),
-                  Text('¿Ya tienes una cuenta?',
-                      style: TextStyle(color: Colors.purple)),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'Inicia sesión',
-                      style: TextStyle(
-                        color: Colors.purple,
-                        fontWeight: FontWeight.bold,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: nombreController,
+                            decoration: InputDecoration(
+                              labelText: 'Nombre completo',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.person),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          TextField(
+                            controller: telefonoController,
+                            decoration: InputDecoration(
+                              labelText: 'Teléfono',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.phone),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          TextField(
+                            controller: correoController,
+                            decoration: InputDecoration(
+                              labelText: 'Correo electrónico',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.email),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          TextField(
+                            controller: passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              labelText: 'Contraseña',
+                              border: OutlineInputBorder(),
+                              suffixIcon: Icon(Icons.visibility_off),
+                              prefixIcon: Icon(Icons.lock),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: _registrarUsuario,
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 50, vertical: 15),
+                              primary: Colors.purple,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            child: Text('Registrarse'),
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('¿Ya tienes una cuenta?'),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  ' Inicia sesión',
+                                  style: TextStyle(
+                                    color: Colors.purple,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
