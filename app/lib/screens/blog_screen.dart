@@ -47,6 +47,31 @@ class _BlogScreenState extends State<ComunidadPage> {
       'user': 'Martin',
       'color': 'blue'
     },
+    {
+      'text': 'Es importante educar a nuestros perros con refuerzos positivos.',
+      'user': 'Laura',
+      'color': 'purple'
+    },
+    {
+      'text': '¿Alguien sabe dónde vacunar a mi perro a buen precio? ¡Gracias!',
+      'user': 'Carlos',
+      'color': 'orange'
+    },
+    {
+      'text': 'No olviden hidratar bien a sus mascotas en días calurosos.',
+      'user': 'Sofía',
+      'color': 'yellow'
+    },
+    {
+      'text': 'Les recomiendo buscar juguetes interactivos, ¡mi perro los adora!',
+      'user': 'Diego',
+      'color': 'teal'
+    },
+    {
+      'text': 'Es increíble cómo las mascotas llenan de alegría nuestro hogar.',
+      'user': 'Mariana',
+      'color': 'pink'
+    }
   ];
 
   // Controlador para el campo de texto
